@@ -1,4 +1,5 @@
-Notes
-=====
+**Description**  
+This repository contains code I've created as part of the COMP125 unit in my computing course at Macquarie University.
 
-This repository contains code I've created as part of my computing course. Use it as you wish.
+**Warning**  
+This repository is unsupported.
