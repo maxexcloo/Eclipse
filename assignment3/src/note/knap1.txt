@@ -1,0 +1,61 @@
+int[][] opt = new int[totalListOfItems.size() + 1][weightCapacity + 1];
+boolean[][] sol = new boolean[totalListOfItems.size() + 1][weightCapacity + 1];
+
+for (int n = 1; n <= totalListOfItems.size(); n++) {
+	for (int w = 1; w <= weightCapacity; w++) {
+		int option1 = opt[n - 1][w];
+
+		int option2 = Integer.MIN_VALUE;
+		if (weight[n] <= w)
+			option2 = profit[n] + opt[n - 1][w - weight[n]];
+
+		opt[n][w] = Math.max(option1, option2);
+		sol[n][w] = (option2 > option1);
+	}
+}
+
+for (int n = totalListOfItems.size(), w = weightCapacity; n > 0; n--) {
+	if (sol[n][w]) {
+		optimalSelection.add(true);
+		w = w - weight[n];
+	} else {
+		optimalSelection.add(false);
+	}
+}
+
+
+====
+
+	public void findOptimalItems(ArrayList<Item> totalListOfItems) {
+		ArrayList<Item> tempList = new ArrayList<Item>();
+		Item tempItem = new Item(0, 0);
+		totalListOfItems.add(tempItem);
+		for (int i = 1; i <= totalListOfItems.size(); i++)
+			tempList.add(totalListOfItems.get(i - 1));
+		
+		int[][] opt = new int[tempList.size()][weightCapacity + 1];
+		boolean[][] sol = new boolean[tempList.size()][weightCapacity + 1];
+
+		for (int n = 1; n <= tempList.size() - 1; n++) {
+			for (int w = 1; w <= weightCapacity; w++) {
+				int option1 = opt[n - 1][w];
+
+				int option2 = Integer.MIN_VALUE;
+				if (totalListOfItems.get(n - 1).getWeight() <= w)
+					option2 = tempList.get(n - 1).getValue() + opt[n - 1][w - tempList.get(n-1).getWeight()];
+
+				opt[n][w] = Math.max(option1, option2);
+				sol[n][w] = (option2 > option1);
+			}
+		}
+
+		for (int n = tempList.size() - 1, w = weightCapacity; n > 0; n--) {
+			if (n == 0) {
+			} else if (sol[n][w]) {
+				optimalSelection.add(true);
+				w = w - tempList.get(n - 1).getWeight();
+			} else {
+				optimalSelection.add(false);
+			}
+		}
+	}

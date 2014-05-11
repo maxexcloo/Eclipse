@@ -1,0 +1,26 @@
+	public void findOptimalItems(ArrayList<Item> totalListOfItems) {
+		// Loop Through Items
+		for(int i = 0; i < totalListOfItems.size(); i++) {
+			// Append To Array List
+			optimalSelection.add(false);
+		}
+
+		System.out.println(permute(totalListOfItems.size() - 1, weightCapacity, totalListOfItems));
+	}
+
+	private int permuteWeight = 0;
+
+	public int permute(int i, int weight, ArrayList<Item> totalListOfItems) {
+		if (i < 0) {
+			return 0;
+		}
+		if (totalListOfItems.get(i).getWeight() > weight) {
+			return permute(i - 1, weight, totalListOfItems);
+		} else {
+			if(permuteWeight + totalListOfItems.get(i).getWeight() <= weightCapacity) {
+				optimalSelection.set(i, true);
+				permuteWeight = permuteWeight + totalListOfItems.get(i).getWeight();
+			}
+			return Math.max(permute(i - 1, weight, totalListOfItems), permute(i - 1, weight - totalListOfItems.get(i).getWeight(), totalListOfItems) + totalListOfItems.get(i).getValue());
+		}
+	}

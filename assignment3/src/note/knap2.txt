@@ -1,0 +1,12 @@
+private static int permute(int i, int weight) {
+	if (i < 0) {
+		return 0;
+	}
+	if (totalListOfItems.get(i).getWeight() > weight) {
+		return permute(i - 1, weight);
+	} else {
+		return Math.max(permute(i - 1, weight), permute(i - 1, weight - totalListOfItems.get(i).getWeight()) + totalListOfItems.get(i).getValue());
+	}
+}
+
+permute(totalListOfItems.size(), weightCapacity));

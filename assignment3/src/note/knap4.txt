@@ -1,0 +1,95 @@
+	public void findOptimalItems(ArrayList<Item> totalListOfItems) {
+		// Create Temp Array Lists
+		ArrayList<Integer> tempList1 = new ArrayList<Integer>();
+		ArrayList<Integer> tempList2 = new ArrayList<Integer>();
+
+		// Set Variables
+		permuteWeight = weightCapacity;
+
+		// Loop Through Items
+		for(int i = 0; i < totalListOfItems.size(); i++) {
+			// Add False To Optimal Selection List
+			optimalSelection.add(false);
+
+			// Add Current Value To Temp List
+			tempList1.add(i);
+		}
+
+		// Permute List & Find Optimal
+		permute(tempList1, tempList2, totalListOfItems);
+	}
+
+	public ArrayList<Boolean> permuteOptimalSelection = new ArrayList<Boolean>();
+	public int permuteValue, permuteWeight;
+
+	public void permute(ArrayList<Integer> list1, ArrayList<Integer> list2, ArrayList<Item> totalListOfItems) {
+		if(list1.isEmpty()) {
+			// Initialize Variables
+			boolean loopRun = true;
+			int bagValue = 0;
+			int bagWeight = 0;
+
+			// Loop Through Items
+			for(int i = 0; i < totalListOfItems.size(); i++) {
+				// Initialize Variables
+				int currentCount = list2.get(i);
+				int currentValue = totalListOfItems.get(currentCount).getValue();
+				int currentWeight = totalListOfItems.get(currentCount).getWeight();
+
+				//System.out.println("WC: " + weightCapacity);
+				//System.out.println("BW: " + bagWeight);
+
+				// Meet Bag Weight Limit
+				if(loopRun && weightCapacity >= bagWeight + currentWeight) {
+					// Add True To Optimal Selection List
+					permuteOptimalSelection.add(true);
+
+					// Add Value
+					bagValue += currentValue;
+
+					// Add Weight
+					bagWeight += currentWeight;
+				} else {
+					// Set Loop Run Boolean
+					loopRun = false;
+
+					// Add False To Optimal Selection List
+					permuteOptimalSelection.add(false);
+				}
+			}
+
+			// Check Result
+			if(permuteWeight >= weightCapacity - bagWeight && permuteValue < bagValue) {
+				// Set Permute Value Value
+				permuteValue = bagValue;
+
+				// Set Permute Weight Value
+				permuteWeight = weightCapacity - bagWeight;
+
+				// Clear Optimal Selection List
+				optimalSelection.clear();
+
+				// Loop Through Optimal List
+				for(int i = 0; i < totalListOfItems.size(); i++)
+					// Copy Item
+					optimalSelection.add(permuteOptimalSelection.get(i));	
+			}
+
+			// Clear Permute Optimal Selection
+			permuteOptimalSelection.clear();
+		} else {
+			for(int i = 0; i < list1.size(); i++) {
+				ArrayList<Integer> tmp1 = new ArrayList<Integer>();
+				for(int k = 0; k < list1.size(); k++)
+					tmp1.add(list1.get(k));
+
+				ArrayList<Integer> tmp2 = new ArrayList<Integer>();
+				for(int k = 0; k < list2.size(); k++)
+					tmp2.add(list2.get(k));				
+
+				tmp2.add(tmp1.remove(i));				
+
+				permute(tmp1, tmp2, totalListOfItems);
+			}
+		}	
+	}
